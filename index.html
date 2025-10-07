@@ -3,53 +3,161 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="view.port" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Data Table</title>
+
+    <!-- style  -->
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        display: grid;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 30px 50px;
+        gap: 30px;
+        background-color: whitesmoke;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      input {
+        padding: 8px;
+      }
+      button {
+        padding: 8px 12px;
+      }
+
+      /* overlay */
+      .overlay-wrapper {
+        width: 100vw;
+        height: 100dvh;
+        display: grid;
+        place-content: center;
+        background-color: rgba(0, 0, 0, 0.721);
+        position: absolute;
+      }
+      .overlay {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 30px;
+        background-color: white;
+        border: 2px solid rgb(224, 220, 220);
+        height: fit-content;
+        width: 80vw;
+      }
+
+      /* top */
+      .top {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        height: fit-content;
+      }
+
+      /* Table  */
+      .table-wrapper {
+        border: 1px solid black;
+      }
+      table {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .table ul {
+        list-style-type: none;
+        display: flex;
+      }
+
+      .table li {
+        padding: 12px 0px;
+        flex: 1;
+      }
+      .table ul li:nth-child(1) {
+        padding-left: 20px;
+      }
+      .table .table-row {
+        border-top: 1px solid black;
+      }
+
+      /* pagination */
+      .pagination {
+        display: flex;
+        justify-content: space-between;
+      }
+      /* universal class */
+      .hide {
+        display: none;
+      }
+      .show {
+        display: flex;
+      }
+    </style>
   </head>
   <body>
-    <div class="overlay-wrapper">
-      <form class="overlay">
-        <input type="text" id="name-input" placeholder="Name" required />
-        <input type="email" id="mail-input" placeholder="E-mail" required />
-        <input type="text" id="salary-input" placeholder="Salary" required />
-        <input type="Date" id="date-input" required />
-        <button type="submit" class="add-btn">Add user</button>
-      </form>
-    </div>
-
-    <!-- top -->
-    <section class="top">
-      <div class="searchbar">
-        <input type="text" id="search-input" placeholder="Search text" />
-        <button>search</button>
+    <main>
+      <div class="overlay-wrapper hide">
+        <form class="overlay">
+          <input type="text" id="name-input" placeholder="Name" required />
+          <input type="email" id="mail-input" placeholder="E-mail" required />
+          <input type="text" id="salary-input" placeholder="Salary" required />
+          <input type="Date" id="date-input" required />
+          <button type="submit" class="add-btn">Add user</button>
+        </form>
       </div>
-      <button type="submit" class="search-btn">Add new user</button>
-    </section>
 
-    <!-- table -->
-    <section class="table-wrapper">
-      <table class="table">
-        <thead>
-          <th>Id</th>
-          <th>Name</th>
-          <th>E-mail</th>
-          <th>Salary</th>
-          <th>Date of birth</th>
-        </thead>
-        <tr class="table-row">
-          <td class="id">Id-number</td>
-          <td class="name">Name</td>
-          <td class="email">Email-Id</td>
-          <td class="salary">Salary</td>
-          <td class="date">Date</td>
-        </tr>
-        <div class="hide">Currently Empty</div>
-      </table>
-    </section>
+      <!-- top -->
+      <section class="top">
+        <h1>Admin</h1>
+        <div class="searchbar">
+          <input type="text" id="search-input" placeholder="Search text" />
+          <button>search</button>
+        </div>
+        <button type="submit" class="search-btn">Add new user</button>
+      </section>
 
-    <!-- pagination -->
-    <section class="pagination">
-      <button type="button" class="prev-btn">Prev</button>
-      <button type="button" class="next-btn">Next</button>
-    </section>
+      <!-- table -->
+      <section class="table-wrapper">
+        <div class="table">
+          <ul class="head">
+            <li>Id</li>
+            <li>Name</li>
+            <li>E-mail</li>
+            <li>Salary</li>
+            <li>Date of birth</li>
+            <li>Action1</li>
+            <li>Action2</li>
+          </ul>
+
+          <ul class="table-row">
+            <li class="id">Id-number</li>
+            <li class="name">Name</li>
+            <li class="email">Email-Id</li>
+            <li class="salary">Salary</li>
+            <li class="date">Date</li>
+            <li class="date">Edit</li>
+            <li class="date">Delete</li>
+          </ul>
+
+          <div class="hide">Currently Empty</div>
+        </div>
+      </section>
+
+      <!-- pagination -->
+      <section class="pagination">
+        <button type="button" class="prev-btn">Prev</button>
+        <button type="button" class="next-btn">Next</button>
+      </section>
+    </main>
   </body>
 </html>
