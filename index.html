@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="view.port" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="overlay-wrapper">
+      <form class="overlay">
+        <input type="text" id="name-input" placeholder="Name" required />
+        <input type="email" id="mail-input" placeholder="E-mail" required />
+        <input type="text" id="salary-input" placeholder="Salary" required />
+        <input type="Date" id="date-input" required />
+        <button type="submit" class="add-btn">Add user</button>
+      </form>
+    </div>
+
+    <!-- top -->
+    <section class="top">
+      <div class="searchbar">
+        <input type="text" id="search-input" placeholder="Search text" />
+        <button>search</button>
+      </div>
+      <button type="submit" class="search-btn">Add new user</button>
+    </section>
+
+    <!-- table -->
+    <section class="table-wrapper">
+      <table class="table">
+        <thead>
+          <th>Id</th>
+          <th>Name</th>
+          <th>E-mail</th>
+          <th>Salary</th>
+          <th>Date of birth</th>
+        </thead>
+        <tr class="table-row">
+          <td class="id">Id-number</td>
+          <td class="name">Name</td>
+          <td class="email">Email-Id</td>
+          <td class="salary">Salary</td>
+          <td class="date">Date</td>
+        </tr>
+        <div class="hide">Currently Empty</div>
+      </table>
+    </section>
+
+    <!-- pagination -->
+    <section class="pagination">
+      <button type="button" class="prev-btn">Prev</button>
+      <button type="button" class="next-btn">Next</button>
+    </section>
+  </body>
+</html>
