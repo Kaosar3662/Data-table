@@ -21,11 +21,16 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         padding: 30px 50px;
         gap: 30px;
         background-color: whitesmoke;
+        overflow: auto;
       }
       main {
+        width: 100%;
+        max-width: 1200px;
+        min-width: 600px;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -35,16 +40,21 @@
       }
       button {
         padding: 8px 12px;
+        cursor: pointer;
       }
 
       /* overlay */
       .overlay-wrapper {
+        position: absolute;
+        left: 0;
         width: 100vw;
         height: 100dvh;
-        display: grid;
-        place-content: center;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
         background-color: rgba(0, 0, 0, 0.721);
-        position: absolute;
       }
       .overlay {
         display: flex;
@@ -54,9 +64,14 @@
         background-color: white;
         border: 2px solid rgb(224, 220, 220);
         height: fit-content;
-        width: 80vw;
+        width: 90%;
+        max-width: 1200px;
       }
-
+      .overlay-wrapper h4 {
+        background-color: white;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
       /* top */
       .top {
         display: flex;
@@ -104,26 +119,28 @@
       }
     </style>
   </head>
-  <body>
-    <main>
-      <div class="overlay-wrapper hide">
-        <form class="overlay">
-          <input type="text" id="name-input" placeholder="Name" required />
-          <input type="email" id="mail-input" placeholder="E-mail" required />
-          <input type="text" id="salary-input" placeholder="Salary" required />
-          <input type="Date" id="date-input" required />
-          <button type="submit" class="add-btn">Add user</button>
-        </form>
-      </div>
 
+  <body>
+    <!-- overlay -->
+    <div class="overlay-wrapper hide">
+      <form class="overlay">
+        <input type="text" id="name-input" placeholder="Name" required />
+        <input type="email" id="mail-input" placeholder="E-mail" required />
+        <input type="text" id="salary-input" placeholder="Salary" required />
+        <input type="Date" id="date-input" required />
+        <button type="submit" class="add-submit-btn">Add user</button>
+      </form>
+      <h4 class="close-btn">close</h4>
+    </div>
+    <main>
       <!-- top -->
       <section class="top">
         <h1>Admin</h1>
         <div class="searchbar">
           <input type="text" id="search-input" placeholder="Search text" />
-          <button>search</button>
+          <button class="search-btn">search</button>
         </div>
-        <button type="submit" class="search-btn">Add new user</button>
+        <button type="submit" class="add-btn">Add new user</button>
       </section>
 
       <!-- table -->
@@ -145,8 +162,8 @@
             <li class="email">Email-Id</li>
             <li class="salary">Salary</li>
             <li class="date">Date</li>
-            <li class="date">Edit</li>
-            <li class="date">Delete</li>
+            <li class="edit-btn">Edit</li>
+            <li class="delet-btn">Delete</li>
           </ul>
 
           <div class="hide">Currently Empty</div>
@@ -159,5 +176,61 @@
         <button type="button" class="next-btn">Next</button>
       </section>
     </main>
+
+    <script>
+      // selector
+      const searchBtn = document.querySelector('.search-btn');
+      const addBtn = document.querySelector('.add-btn');
+      const closeBtn = document.querySelector('.close-btn');
+      const overlay = document.querySelector('.overlay-wrapper');
+      const overlayclose = document.querySelector('.close-btn');
+      const form = document.querySelector('.overlay');
+      const maintable = document.querySelector('.table');
+      const nameinput = document.querySelector('#name-input');
+      const mailinput = document.querySelector('#mail-input');
+      const salaryinput = document.querySelector('#salary-input');
+      const date = document.querySelector('#date-input');
+
+      // Editing?
+      let editable = false;
+
+      // Event-listener
+      addBtn.addEventListener('click', function () {
+        overlay.classList.add('show');
+      });
+      closeBtn.addEventListener('click', function () {
+        overlay.classList.remove('show');
+      });
+
+      form.addEventListener('submit', addItem);
+
+      // functions
+      function addItem(e) {
+        e.preventDefault();
+        const namevalue = nameinput.value;
+        const mailvalue = mailinput.value;
+        const salaryvalue = salaryinput.value;
+        const datevalue = date.value;
+        const id = new Date().getTime().toString();
+
+        if ((editable == false
+
+        )) {
+          const newrow = document.createElement('ul');
+          newrow.classList.add('table-row');
+          const attrb = document.createAttribute('data-id');
+          attrb.value = id;
+          newrow.innerHTML = `<li class="id">${id}</li>
+            <li class="name">${namevalue}</li>
+            <li class="email">${mailvalue}-Id</li>
+            <li class="salary">${salaryvalue}</li>
+            <li class="date">${datevalue}</li>
+            <li class="edit-btn">Edit</li>
+            <li class="delet-btn">Delete</li>`;
+          maintable.appendChild(newrow);
+          overlay.classList.remove('show');
+        }
+      }
+    </script>
   </body>
 </html>
