@@ -20,7 +20,7 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: start;
         align-items: center;
         padding: 30px 50px;
         gap: 30px;
@@ -47,6 +47,7 @@
       .overlay-wrapper {
         position: absolute;
         left: 0;
+        top: 0;
         width: 100vw;
         height: 100dvh;
         display: flex;
@@ -165,15 +166,15 @@
             <li>Action2</li>
           </ul>
           <div class="tbody">
-            <!-- <ul class="table-row">
-              <li class="id">Id-number</li>
-              <li class="name">Name</li>
-              <li class="email">Email</li>
-              <li class="salary">Salary</li>
-              <li class="date">Date</li>
+            <ul class="table-row">
+              <li class="01">Id-number</li>
+              <li class="Shadhin">Name</li>
+              <li class="example@email.com">Email</li>
+              <li class="salary">1000</li>
+              <li class="date">30-12-2000</li>
               <li class="edit-btn">Edit</li>
               <li class="delet-btn">Delete</li>
-            </ul> -->
+            </ul>
           </div>
 
           <div class="hide">Currently Empty</div>
@@ -201,6 +202,11 @@
       const salaryinput = document.querySelector('#salary-input');
       const date = document.querySelector('#date-input');
       const editSubmitBtn = document.querySelector('.add-submit-btn');
+      const searchInput = document.querySelector('#search-input');
+      const name = document.querySelector('.name');
+      const mail = document.querySelector('.email');
+      const salary = document.querySelector('.salary');
+      const list = document.getElementsByTagName('li');
 
       // Editing?
       let editable = false;
@@ -251,9 +257,10 @@
           editingRow.children[2].textContent = mailvalue;
           editingRow.children[3].textContent = salaryvalue;
           editingRow.children[4].textContent = datevalue;
-
-          overlay.classList.remove('show');
           form.reset();
+          overlay.classList.remove('show');
+          editSubmitBtn.textContent = 'Add -User';
+          editable = false;
         }
       }
 
@@ -277,6 +284,13 @@
         editSubmitBtn.textContent = 'Save';
         overlay.classList.add('show');
       }
+
+      searchInput.addEventListener('input', function (e) {
+        const value = e.target.value;
+        if (list) {
+          console.log('Not-working');
+        }
+      });
     </script>
   </body>
 </html>
