@@ -91,18 +91,22 @@
       }
       .table ul {
         list-style-type: none;
-        display: flex;
+        display: grid;
+        grid-template-columns: 2fr 1fr 2fr 1fr 1fr 1fr 1fr;
       }
 
       .table li {
         padding: 12px 0px;
-        flex: 1;
       }
       .table ul li:nth-child(1) {
         padding-left: 20px;
       }
       .table .table-row {
         border-top: 1px solid black;
+      }
+      .tbody {
+        display: flex;
+        flex-direction: column-reverse;
       }
 
       /* pagination */
@@ -155,16 +159,17 @@
             <li>Action1</li>
             <li>Action2</li>
           </ul>
-
-          <ul class="table-row">
-            <li class="id">Id-number</li>
-            <li class="name">Name</li>
-            <li class="email">Email-Id</li>
-            <li class="salary">Salary</li>
-            <li class="date">Date</li>
-            <li class="edit-btn">Edit</li>
-            <li class="delet-btn">Delete</li>
-          </ul>
+          <div class="tbody">
+            <!-- <ul class="table-row">
+              <li class="id">Id-number</li>
+              <li class="name">Name</li>
+              <li class="email">Email</li>
+              <li class="salary">Salary</li>
+              <li class="date">Date</li>
+              <li class="edit-btn">Edit</li>
+              <li class="delet-btn">Delete</li>
+            </ul> -->
+          </div>
 
           <div class="hide">Currently Empty</div>
         </div>
@@ -185,7 +190,7 @@
       const overlay = document.querySelector('.overlay-wrapper');
       const overlayclose = document.querySelector('.close-btn');
       const form = document.querySelector('.overlay');
-      const maintable = document.querySelector('.table');
+      const maintable = document.querySelector('.tbody');
       const nameinput = document.querySelector('#name-input');
       const mailinput = document.querySelector('#mail-input');
       const salaryinput = document.querySelector('#salary-input');
@@ -213,23 +218,49 @@
         const datevalue = date.value;
         const id = new Date().getTime().toString();
 
-        if ((editable == false
-
-        )) {
+        if (editable == false) {
           const newrow = document.createElement('ul');
           newrow.classList.add('table-row');
           const attrb = document.createAttribute('data-id');
           attrb.value = id;
           newrow.innerHTML = `<li class="id">${id}</li>
             <li class="name">${namevalue}</li>
-            <li class="email">${mailvalue}-Id</li>
+            <li class="email">${mailvalue}</li>
             <li class="salary">${salaryvalue}</li>
             <li class="date">${datevalue}</li>
             <li class="edit-btn">Edit</li>
             <li class="delet-btn">Delete</li>`;
           maintable.appendChild(newrow);
-          overlay.classList.remove('show');
+
+          formToDefault();
+
+
+          // Edit & delet event
+          const deleteBtn = newrow.querySelector('.delet-btn');
+          deleteBtn.addEventListener('click', deleteItem);
+          const editBtn = newrow.querySelector('.edit-btn');
+          editBtn.addEventListener('click', editItem);
         }
+        else{
+
+        }
+      }
+
+      function deleteItem(e){
+      const delitem = e.currentTarget.parentElement;
+      maintable.removeChild(delitem)
+
+      }
+
+      function editItem(e){
+        const editelement = e.currentTarget.parentElement;
+        editable = true;
+        overlay.classList.add("show");
+      }
+
+      formToDefault(){
+           form.reset();
+          overlay.classList.remove('show');
       }
     </script>
   </body>
