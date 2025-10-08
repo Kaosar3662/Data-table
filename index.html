@@ -195,6 +195,7 @@
       const mailinput = document.querySelector('#mail-input');
       const salaryinput = document.querySelector('#salary-input');
       const date = document.querySelector('#date-input');
+      const editSubmitBtn = document.querySelector('.add-submit-btn');
 
       // Editing?
       let editable = false;
@@ -224,43 +225,43 @@
           const attrb = document.createAttribute('data-id');
           attrb.value = id;
           newrow.innerHTML = `<li class="id">${id}</li>
-            <li class="name">${namevalue}</li>
-            <li class="email">${mailvalue}</li>
-            <li class="salary">${salaryvalue}</li>
-            <li class="date">${datevalue}</li>
-            <li class="edit-btn">Edit</li>
-            <li class="delet-btn">Delete</li>`;
+                  <li class="name">${namevalue}</li>
+                  <li class="email">${mailvalue}</li>
+                  <li class="salary">${salaryvalue}</li>
+                  <li class="date">${datevalue}</li>
+                  <li class="edit-btn">Edit</li>
+                  <li class="delet-btn">Delete</li>`;
           maintable.appendChild(newrow);
 
-          formToDefault();
-
+          form.reset();
+          overlay.classList.remove('show');
 
           // Edit & delet event
           const deleteBtn = newrow.querySelector('.delet-btn');
           deleteBtn.addEventListener('click', deleteItem);
           const editBtn = newrow.querySelector('.edit-btn');
           editBtn.addEventListener('click', editItem);
-        }
-        else{
-
+        } else {
+          console.log('editing');
+          // editelement.innerHTML = value;
         }
       }
 
-      function deleteItem(e){
-      const delitem = e.currentTarget.parentElement;
-      maintable.removeChild(delitem)
-
+      function deleteItem(e) {
+        const delitem = e.currentTarget.parentElement;
+        maintable.removeChild(delitem);
       }
 
-      function editItem(e){
+      function editItem(e) {
         const editelement = e.currentTarget.parentElement;
         editable = true;
-        overlay.classList.add("show");
-      }
-
-      formToDefault(){
-           form.reset();
-          overlay.classList.remove('show');
+        nameinput.value = editelement.children[1].textContent;
+        mailinput.value = editelement.children[2].textContent;
+        salaryinput.value = editelement.children[3].textContent;
+        date.value = editelement.children[4].textContent;
+        editSubmitBtn.textContent = "Save";
+        const value = `How do i set all value inside here`;
+        overlay.classList.add('show');
       }
     </script>
   </body>
