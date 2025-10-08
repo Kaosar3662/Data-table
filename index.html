@@ -29,8 +29,8 @@
       }
       main {
         width: 100%;
-        max-width: 1200px;
-        min-width: 600px;
+        max-width: 1400px;
+        min-width: 1044px;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -65,7 +65,7 @@
         border: 2px solid rgb(224, 220, 220);
         height: fit-content;
         width: 90%;
-        max-width: 1200px;
+        max-width: 600px;
       }
       .overlay-wrapper h4 {
         background-color: white;
@@ -109,6 +109,11 @@
         flex-direction: column-reverse;
       }
 
+      .edit-btn,
+      .delet-btn {
+        cursor: pointer;
+      }
+
       /* pagination */
       .pagination {
         display: flex;
@@ -128,10 +133,10 @@
     <!-- overlay -->
     <div class="overlay-wrapper hide">
       <form class="overlay">
-        <input type="text" id="name-input" placeholder="Name" required />
-        <input type="email" id="mail-input" placeholder="E-mail" required />
-        <input type="text" id="salary-input" placeholder="Salary" required />
-        <input type="Date" id="date-input" required />
+        <input type="text" id="name-input" placeholder="Name" />
+        <input type="email" id="mail-input" placeholder="E-mail" />
+        <input type="text" id="salary-input" placeholder="Salary" />
+        <input type="Date" id="date-input" />
         <button type="submit" class="add-submit-btn">Add user</button>
       </form>
       <h4 class="close-btn">close</h4>
@@ -233,8 +238,8 @@
                   <li class="delet-btn">Delete</li>`;
           maintable.appendChild(newrow);
 
-          form.reset();
           overlay.classList.remove('show');
+          form.reset();
 
           // Edit & delet event
           const deleteBtn = newrow.querySelector('.delet-btn');
@@ -242,8 +247,13 @@
           const editBtn = newrow.querySelector('.edit-btn');
           editBtn.addEventListener('click', editItem);
         } else {
-          console.log('editing');
-          // editelement.innerHTML = value;
+          editingRow.children[1].textContent = namevalue;
+          editingRow.children[2].textContent = mailvalue;
+          editingRow.children[3].textContent = salaryvalue;
+          editingRow.children[4].textContent = datevalue;
+
+          overlay.classList.remove('show');
+          form.reset();
         }
       }
 
@@ -255,12 +265,16 @@
       function editItem(e) {
         const editelement = e.currentTarget.parentElement;
         editable = true;
-        nameinput.value = editelement.children[1].textContent;
-        mailinput.value = editelement.children[2].textContent;
-        salaryinput.value = editelement.children[3].textContent;
-        date.value = editelement.children[4].textContent;
-        editSubmitBtn.textContent = "Save";
-        const value = `How do i set all value inside here`;
+        editingRow = editelement;
+        editName = editelement.children[1].textContent;
+        editmail = editelement.children[2].textContent;
+        editSalary = editelement.children[3].textContent;
+        editDate = editelement.children[4].textContent;
+        nameinput.value = editName;
+        mailinput.value = editmail;
+        salaryinput.value = editSalary;
+        date.value = editDate;
+        editSubmitBtn.textContent = 'Save';
         overlay.classList.add('show');
       }
     </script>
