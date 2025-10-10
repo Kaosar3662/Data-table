@@ -190,7 +190,7 @@
 
     <script>
       // selector
-      const searchBtn = document.querySelector('.search-btn');
+
       const addBtn = document.querySelector('.add-btn');
       const closeBtn = document.querySelector('.close-btn');
       const overlay = document.querySelector('.overlay-wrapper');
@@ -249,9 +249,33 @@
 
           // Edit & delet event
           const deleteBtn = newrow.querySelector('.delet-btn');
+          var item = newrow.querySelector('.name');
           deleteBtn.addEventListener('click', deleteItem);
           const editBtn = newrow.querySelector('.edit-btn');
           editBtn.addEventListener('click', editItem);
+          const searchBtn = document.querySelector('.search-btn');
+
+          searchInput.addEventListener('input', function (e) {
+            const value = e.target.value.toLowerCase();
+            console.log(item);
+
+            // for (let i = 0; i < tr.length; i++) {
+            //   const name = item[i].getElementsByTagName('td')[1];
+            //   const email = tr[i].getElementsByTagName('td')[2];
+            //   if (name || email) {
+            //     const nameValue = name.textContent || name.innerText;
+            //     const emailValue = email.textContent || email.innerText;
+            //     if (
+            //       nameValue.toLowerCase().indexOf(value) > -1 ||
+            //       emailValue.toLowerCase().indexOf(value) > -1
+            //     ) {
+            //       tr[i].style.display = '';
+            //     } else {
+            //       tr[i].style.display = 'none';
+            //     }
+            //   }
+            // }
+          });
         } else {
           editingRow.children[1].textContent = namevalue;
           editingRow.children[2].textContent = mailvalue;
@@ -284,13 +308,6 @@
         editSubmitBtn.textContent = 'Save';
         overlay.classList.add('show');
       }
-
-      searchInput.addEventListener('input', function (e) {
-        const value = e.target.value;
-        if (list) {
-          console.log('Not-working');
-        }
-      });
     </script>
   </body>
 </html>
