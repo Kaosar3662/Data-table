@@ -71,6 +71,7 @@
         justify-content: center;
         gap: 30px;
         background-color: rgba(0, 0, 0, 0.721);
+        z-index: 10;
       }
       .overlay {
         display: flex;
@@ -143,6 +144,9 @@
         border: solid 1px grey;
       }
       /* universal class */
+      .active{
+        background-color: rgba(159, 159, 159, 0.365);
+      }
       .hide {
         display: none;
       }
@@ -312,7 +316,7 @@
       }
 
       // PAGINATION STARTS HERE
-      const rowsPerPage = 5;
+      const rowsPerPage = 2;
       let currentPage = 1;
 
       function displayTableRows() {
