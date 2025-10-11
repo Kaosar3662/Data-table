@@ -166,7 +166,7 @@
             <li>Action2</li>
           </ul>
           <div class="tbody">
-            <ul class="table-row">
+            <!-- <ul class="table-row">
               <li class="01">Id-number</li>
               <li class="Shadhin">Name</li>
               <li class="example@email.com">Email</li>
@@ -174,7 +174,7 @@
               <li class="date">30-12-2000</li>
               <li class="edit-btn">Edit</li>
               <li class="delet-btn">Delete</li>
-            </ul>
+            </ul> -->
           </div>
 
           <div class="hide">Currently Empty</div>
@@ -247,34 +247,29 @@
           overlay.classList.remove('show');
           form.reset();
 
-          // Edit & delet event
+          // All event after the new row added
           const deleteBtn = newrow.querySelector('.delet-btn');
-          var item = newrow.querySelector('.name');
           deleteBtn.addEventListener('click', deleteItem);
           const editBtn = newrow.querySelector('.edit-btn');
           editBtn.addEventListener('click', editItem);
-          const searchBtn = document.querySelector('.search-btn');
+          const name = newrow.querySelector('.name').parentElement;
+          const email = newrow.querySelector('.email').parentElement;
 
+          const searchBtn = document.querySelector('.search-btn');
           searchInput.addEventListener('input', function (e) {
             const value = e.target.value.toLowerCase();
-            console.log(item);
 
-            // for (let i = 0; i < tr.length; i++) {
-            //   const name = item[i].getElementsByTagName('td')[1];
-            //   const email = tr[i].getElementsByTagName('td')[2];
-            //   if (name || email) {
-            //     const nameValue = name.textContent || name.innerText;
-            //     const emailValue = email.textContent || email.innerText;
-            //     if (
-            //       nameValue.toLowerCase().indexOf(value) > -1 ||
-            //       emailValue.toLowerCase().indexOf(value) > -1
-            //     ) {
-            //       tr[i].style.display = '';
-            //     } else {
-            //       tr[i].style.display = 'none';
-            //     }
-            //   }
-            // }
+            // emailText = email.innerText;
+            // const trimmedEmail =trimTextAfter(emailText , '@')
+            // Trim is not working I dont know why ??
+            if (
+              name.innerText.indexOf(value) > -1 ||
+              email.innerText.indexOf(value) > -1
+            ) {
+              name.style.display = 'grid';
+            } else {
+              name.style.display = 'none';
+            }
           });
         } else {
           editingRow.children[1].textContent = namevalue;
