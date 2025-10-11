@@ -134,10 +134,10 @@
     <!-- overlay -->
     <div class="overlay-wrapper hide">
       <form class="overlay">
-        <input type="text" id="name-input" placeholder="Name" />
-        <input type="email" id="mail-input" placeholder="E-mail" />
-        <input type="text" id="salary-input" placeholder="Salary" />
-        <input type="Date" id="date-input" />
+        <input type="text" id="name-input" placeholder="Name" required />
+        <input type="email" id="mail-input" placeholder="E-mail" required />
+        <input type="number" id="salary-input" placeholder="Salary" required />
+        <input type="Date" id="date-input" required />
         <button type="submit" class="add-submit-btn">Add user</button>
       </form>
       <h4 class="close-btn">close</h4>
@@ -148,7 +148,6 @@
         <h1>Admin</h1>
         <div class="searchbar">
           <input type="text" id="search-input" placeholder="Search text" />
-          <button class="search-btn">search</button>
         </div>
         <button type="submit" class="add-btn">Add new user</button>
       </section>
@@ -182,9 +181,16 @@
       </section>
 
       <!-- pagination -->
-      <section class="pagination">
-        <button type="button" class="prev-btn">Prev</button>
-        <button type="button" class="next-btn">Next</button>
+      <section class="pagination-section">
+        <div class="pagination" id="pagination">
+          <a href="#" id="prev"> Prev</a>
+          <a href="#" class="page-link">1</a>
+          <a href="#" class="active page-link">2</a>
+          <a href="#" class="page-link">3</a>
+          <a href="#" class="page-link">4</a>
+          <a href="#" class="page-link">5</a>
+          <a href="#" id="next">Next</a>
+        </div>
       </section>
     </main>
 
@@ -303,6 +309,75 @@
         editSubmitBtn.textContent = 'Save';
         overlay.classList.add('show');
       }
+
+      const rowsPerPage = 5;
+      let currentPage = 1;
+
+      function displayTableRows() {
+        const rows = maintable.querySelectorAll('.table-row');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        rows.forEach((row, index) => {
+          row.style.display =
+            index >= (currentPage - 1) * rowsPerPage &&
+            index < currentPage * rowsPerPage
+              ? 'grid'
+              : 'none';
+        });
+        updatePagination(totalPages);
+      }
+      cd;
+
+      function updatePagination(totalPages) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = '';
+
+        const prev = document.createElement('a');
+        prev.href = '#';
+        prev.textContent = 'Prev';
+        prev.addEventListener('click', e => {
+          e.preventDefault();
+          if (currentPage > 1) {
+            currentPage--;
+            displayTableRows();
+          }
+        });
+        paginationContainer.appendChild(prev);
+
+        for (let i = 1; i <= totalPages; i++) {
+          const pageLink = document.createElement('a');
+          pageLink.href = '#';
+          pageLink.textContent = i;
+          pageLink.classList.add('page-link');
+          if (i === currentPage) {
+            pageLink.classList.add('active');
+          }
+          pageLink.addEventListener('click', e => {
+            e.preventDefault();
+            currentPage = i;
+            displayTableRows();
+          });
+          paginationContainer.appendChild(pageLink);
+        }
+
+        const next = document.createElement('a');
+        next.href = '#';
+        next.textContent = 'Next';
+        next.addEventListener('click', e => {
+          e.preventDefault();
+          if (currentPage < totalPages) {
+            currentPage++;
+            displayTableRows();
+          }
+        });
+        paginationContainer.appendChild(next);
+      }
+      window.addEventListener('DOMContentLoaded', displayTableRows);
+      const observer = new MutationObserver(() => {
+        displayTableRows();
+      });
+      observer.observe(maintable, { childList: true });
     </script>
   </body>
 </html>
