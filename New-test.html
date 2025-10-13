@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LS CRUD</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0px;
+        padding: 0px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 40px;
+        min-height: 100vh;
+        background-color: rgb(216, 227, 229);
+      }
+
+      input,
+      button,
+      select,
+      .empty {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .container {
+        background: #f4f9ff;
+        padding: 20px;
+        border: solid 1px black;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      header .filterEntries {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* Table */
+      .container table {
+        border-collapse: collapse;
+        text-align: left;
+      }
+      thead tr th,
+      tbody tr td {
+        border: 1px solid;
+        padding: 3px 15px;
+      }
+      table footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      /* overlay */
+      .popup-background {
+        background-color: rgba(0, 0, 0, 0.532);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        place-content: center;
+        z-index: 10;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .popup-background .popup {
+        background-color: #f4f9ff;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        border: solid 1px black;
+      }
+      .imgholder,
+      label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+      }
+      .inputFieldContainer input,
+      .popup button {
+        width: 100%;
+      }
+      .inputFieldContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      /* Universal Styles */
+      .hide {
+        display: none;
+      }
+      .show {
+        display: flex;
+      }
+      .active {
+        transform: scale(1);
+        opacity: 1;
+        background-color: rgba(143, 127, 219, 0.587);
+        visibility: visible;
+      }
+
+      /* dont know why add this 3 block  */
+      .pagination button.active,
+      .pagination button:hover {
+        background: var(--red1);
+      }
+
+      .pagination button.act:first-child {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .pagination button.act:last-child {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h2>Admin</h2>
+        <!-- <div class="filterEntries">
+           <div class="entries">
+            Show
+            <select name="" id="table-size">
+              <option value="5">5</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            entries
+          </div> 
+
+          <div class="filter">
+            <input
+              type="search"
+              name=""
+              id="search"
+              placeholder="Search here"
+            />
+          </div>
+        </div> -->
+
+        <div class="addMemberBtn">
+          <button>Add member</button>
+        </div>
+      </header>
+
+      <table>
+        <thead>
+          <tr class="heading">
+            <th>Id</th>
+            <th>Img</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="userInfo">
+          <!-- <tr>
+            <td class="empty" colspan="11" align="center">
+              Nothing Was Found In The LS
+            </td>
+          </tr> -->
+          <!-- <tr>
+            <td>1</td>
+            <td><img src="img.png" width="30" alt="image" /></td>
+            <td>Kaosar</td>
+            <td>kaosar@gmail.com</td>
+            <td>000000000</td>
+            <td>
+              <button>Edit</button>
+              <button>Devar</button>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td><img src="img.png" width="30" alt="image" /></td>
+            <td>Kaosar</td>
+            <td>kaosar@gmail.com</td>
+            <td>000000000</td>
+            <td>
+              <button>Edit</button>
+              <button>Devar</button>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td><img src="img.png" width="30" alt="image" /></td>
+            <td>Kaosar</td>
+            <td>kaosar@gmail.com</td>
+            <td>000000000</td>
+            <td>
+              <button>Edit</button>
+              <button>Devar</button>
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+
+      <footer>
+        <span class="showEntries">1 to 10 out of 500</span>
+        <div class="pagination">
+          <!-- <button>Prev</button>
+          <button class="active">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>4</button>
+          <button>5</button>
+          <button>Next</button> -->
+        </div>
+      </footer>
+    </div>
+
+    <!-- overlay -->
+    <div class="popup-background">
+      <div class="popup">
+        <header>
+          <button class="closeBtn">close</button>
+        </header>
+        <div class="body">
+          <form action="#" id="myForm">
+            <div class="imgholder">
+              <label for="uploadimg" class="upload">
+                <input type="file" name="" id="uploadimg" class="picture" />
+                <i>Upload</i>
+                <img src="img.png" width="50" alt="img" class="img" />
+              </label>
+            </div>
+            <div class="inputFieldContainer">
+              <div class="nameField">
+                <div class="form_control">
+                  <label for="fName">Full Name:</label>
+                  <input type="text" name="" id="fName" required />
+                </div>
+              </div>
+
+              <div class="form_control">
+                <label for="email">Email:</label>
+                <input type="email" name="" id="email" required />
+              </div>
+
+              <div class="form_control">
+                <label for="phone">Phone:</label>
+                <input type="number" name="" id="phone" required />
+              </div>
+            </div>
+          </form>
+        </div>
+        <footer>
+          <button form="myForm" class="submitBtn">Submit</button>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+// Select Items
+var newMemberAddBtn = document.querySelector('.addMemberBtn'),
+    darkBg = document.querySelector('.popup-background'),
+    popupForm = document.querySelector('.popup'),
+    crossBtn = document.querySelector('.closeBtn'),
+    submitBtn = document.querySelector('.submitBtn'),
+    imgInput = document.querySelector('.img'),
+    uploadimg = document.querySelector('#uploadimg'),
+    fName = document.getElementById('fName'),
+    email = document.getElementById('email'),
+    phone = document.getElementById('phone'),
+    userInfo = document.querySelector('.userInfo'),
+    table = document.querySelector('table'),
+    entries = document.querySelector('.showEntries'),
+    tabSize = document.getElementById('table-size');
+
+var Data = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [];
+var tableSize = 5;
+var currentIndex = 1;
+var startIndex = 0;
+var endIndex = 0;
+var maxIndex = 0;
+var isEdit = false;
+var editId = null;
+
+// Functions
+function preloadCalculation() {
+    maxIndex = Math.ceil(Data.length / tableSize);
+}
+
+function displayIndexBtn() {
+    preloadCalculation();
+    var pagination = document.querySelector('.pagination');
+    pagination.innerHTML = `<button onclick="prev()" class="prev">Prev</button>`;
+    for (var a = 1; a <= maxIndex; a++) {
+        pagination.innerHTML += `<button onclick="paginationBtn(${a})" index="${a}">${a}</button>`;
+    }
+    pagination.innerHTML += `<button onclick="next()" class="next">Next</button>`;
+}
+
+function highlightIndexBtn() {
+    startIndex = (currentIndex - 1) * tableSize;
+    endIndex = startIndex + tableSize;
+    if (endIndex > Data.length) endIndex = Data.length;
+
+    entries.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${Data.length} entries`;
+
+    var paginationBtns = document.querySelectorAll('.pagination button');
+    paginationBtns.forEach(btn => btn.classList.remove('active'));
+    paginationBtns.forEach(btn => {
+        if (btn.getAttribute('index') == currentIndex) btn.classList.add('active');
+    });
+
+    showInfo();
+}
+
+function showInfo() {
+    userInfo.innerHTML = '';
+    if (Data.length === 0) {
+        userInfo.innerHTML = `<tr><td class="empty" colspan="6" align="center">No data available in table</td></tr>`;
+        return;
+    }
+
+    for (var i = startIndex; i < endIndex; i++) {
+        const staff = Data[i];
+        userInfo.innerHTML += `<tr class="employeeDetails">
+            <td>${i + 1}</td>
+            <td><img src="${staff.picture}" width="40" height="40"></td>
+            <td>${staff.fName}</td>
+            <td>${staff.emailVal}</td>
+            <td>${staff.phoneVal}</td>
+            <td>
+                <button onclick="editInfo(${i})">Edit</button>
+                <button onclick="deleteInfo(${i})">Delete</button>
+            </td>
+        </tr>`;
+    }
+}
+
+// Edit & Delete Functions
+function editInfo(i) {
+    isEdit = true;
+    editId = i;
+    const staff = Data[i];
+    imgInput.src = staff.picture || 'img.png';
+    fName.value = staff.fName;
+    email.value = staff.emailVal;
+    phone.value = staff.phoneVal;
+    submitBtn.innerHTML = 'Update';
+    darkBg.classList.add('active');
+    popupForm.classList.add('active');
+}
+
+function deleteInfo(i) {
+    if (confirm('Are you sure you want to delete this entry?')) {
+        Data.splice(i, 1);
+        localStorage.setItem('user', JSON.stringify(Data));
+        if (currentIndex > Math.ceil(Data.length / tableSize)) currentIndex--;
+        displayIndexBtn();
+        highlightIndexBtn();
+    }
+}
+
+// Event Listeners
+newMemberAddBtn.addEventListener('click', () => {
+    isEdit = false;
+    editId = null;
+    submitBtn.innerHTML = 'Submit';
+    imgInput.src = 'img.png';
+    darkBg.classList.add('active');
+    popupForm.classList.add('active');
+});
+
+crossBtn.addEventListener('click', () => {
+    darkBg.classList.remove('active');
+    popupForm.classList.remove('active');
+    document.getElementById('myForm').reset();
+});
+
+uploadimg.onchange = function () {
+    if (uploadimg.files[0].size < 5000000) {
+        var filereader = new FileReader();
+        filereader.onload = function (w) {
+            imgInput.src = w.target.result;
+        };
+        filereader.readAsDataURL(uploadimg.files[0]);
+    } else {
+        alert('File is too large!');
+    }
+};
+
+document.getElementById('myForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const information = {
+        id: Date.now(),
+        picture: imgInput.src || 'img.png',
+        fName: fName.value,
+        emailVal: email.value,
+        phoneVal: phone.value,
+    };
+
+    if (isEdit && editId !== null) {
+        Data[editId] = information;
+    } else {
+        Data.unshift(information);
+    }
+
+    localStorage.setItem('user', JSON.stringify(Data));
+    darkBg.classList.remove('active');
+    popupForm.classList.remove('active');
+    document.getElementById('myForm').reset();
+    displayIndexBtn();
+    highlightIndexBtn();
+});
+
+function next() {
+    if (currentIndex < maxIndex) {
+        currentIndex++;
+        highlightIndexBtn();
+    }
+}
+
+function prev() {
+    if (currentIndex > 1) {
+        currentIndex--;
+        highlightIndexBtn();
+    }
+}
+
+function paginationBtn(i) {
+    currentIndex = i;
+    highlightIndexBtn();
+}
+
+tabSize && tabSize.addEventListener('change', function () {
+    tableSize = parseInt(tabSize.value);
+    currentIndex = 1;
+    displayIndexBtn();
+    highlightIndexBtn();
+});
+
+// Initialize
+displayIndexBtn();
+highlightIndexBtn();
+    </script>
+  </body>
+</html>
