@@ -16,7 +16,7 @@
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        padding-top: 40px;
+        padding: 40px;
         min-height: 100vh;
         background-color: rgb(216, 227, 229);
       }
@@ -29,6 +29,8 @@
         cursor: pointer;
       }
       .container {
+        width: 100%;
+        max-width: 1200px;
         background: #f4f9ff;
         padding: 20px;
         border: solid 1px black;
@@ -134,24 +136,18 @@
         opacity: 1;
         pointer-events: auto;
       }
+      .disabled {
+        pointer-events: none;
+        opacity: 30%;
+        user-select: none;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <header>
         <h2>Admin</h2>
-        <!-- <div class="filterEntries">
-           <div class="entries">
-            Show
-            <select name="" id="table-size">
-              <option value="5">5</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-            entries
-          </div> 
-
+        <div class="filterEntries">
           <div class="filter">
             <input
               type="search"
@@ -160,7 +156,7 @@
               placeholder="Search here"
             />
           </div>
-        </div> -->
+        </div>
 
         <div class="addMemberBtn">
           <button>Add member</button>
@@ -276,190 +272,244 @@
     </div>
 
     <script>
-// Select Items
-var newMemberAddBtn = document.querySelector('.addMemberBtn'),
-    darkBg = document.querySelector('.popup-background'),
-    popupForm = document.querySelector('.popup'),
-    crossBtn = document.querySelector('.closeBtn'),
-    submitBtn = document.querySelector('.submitBtn'),
-    imgInput = document.querySelector('.img'),
-    uploadimg = document.querySelector('#uploadimg'),
-    fName = document.getElementById('fName'),
-    email = document.getElementById('email'),
-    phone = document.getElementById('phone'),
-    userInfo = document.querySelector('.userInfo'),
-    table = document.querySelector('table'),
-    entries = document.querySelector('.showEntries'),
-    tabSize = document.getElementById('table-size');
+      // Select Items
+      var newMemberAddBtn = document.querySelector('.addMemberBtn'),
+        darkBg = document.querySelector('.popup-background'),
+        popupForm = document.querySelector('.popup'),
+        crossBtn = document.querySelector('.closeBtn'),
+        submitBtn = document.querySelector('.submitBtn'),
+        imgInput = document.querySelector('.img'),
+        uploadimg = document.querySelector('#uploadimg'),
+        fName = document.getElementById('fName'),
+        email = document.getElementById('email'),
+        phone = document.getElementById('phone'),
+        userInfo = document.querySelector('.userInfo'),
+        table = document.querySelector('table'),
+        entries = document.querySelector('.showEntries'),
+        tabSize = document.getElementById('table-size'),
+        search = document.getElementById('search');
 
-var Data = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [];
-var tableSize = 5;
-var currentIndex = 1;
-var startIndex = 0;
-var endIndex = 0;
-var maxIndex = 0;
-var isEdit = false;
-var editId = null;
+      var Data = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user'))
+        : [];
+      var tableSize = 5;
+      var currentIndex = 1;
+      var startIndex = 0;
+      var endIndex = 0;
+      var maxIndex = 0;
+      var isEdit = false;
+      var editId = null;
 
-// Functions
-function preloadCalculation() {
-    maxIndex = Math.ceil(Data.length / tableSize);
-}
+      // Functions
+      function preloadCalculation() {
+        maxIndex = Math.ceil(Data.length / tableSize);
+      }
 
-function displayIndexBtn() {
-    preloadCalculation();
-    var pagination = document.querySelector('.pagination');
-    pagination.innerHTML = `<button onclick="prev()" class="prev">Prev</button>`;
-    for (var a = 1; a <= maxIndex; a++) {
-        pagination.innerHTML += `<button onclick="paginationBtn(${a})" index="${a}">${a}</button>`;
-    }
-    pagination.innerHTML += `<button onclick="next()" class="next">Next</button>`;
-}
+      function displayIndexBtn() {
+        preloadCalculation();
+        var pagination = document.querySelector('.pagination');
+        pagination.innerHTML = `<button onclick="prev()" class="prev">Prev</button>`;
+        for (var a = 1; a <= maxIndex; a++) {
+          pagination.innerHTML += `<button onclick="paginationBtn(${a})" index="${a}">${a}</button>`;
+        }
+        pagination.innerHTML += `<button onclick="next()" class="next">Next</button>`;
+      }
 
-function highlightIndexBtn() {
-    startIndex = (currentIndex - 1) * tableSize;
-    endIndex = startIndex + tableSize;
-    if (endIndex > Data.length) endIndex = Data.length;
+      function highlightIndexBtn() {
+        startIndex = (currentIndex - 1) * tableSize;
+        endIndex = startIndex + tableSize;
+        if (endIndex > Data.length) endIndex = Data.length;
 
-    entries.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${Data.length} entries`;
+        entries.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${
+          Data.length
+        } entries`;
 
-    var paginationBtns = document.querySelectorAll('.pagination button');
-    paginationBtns.forEach(btn => btn.classList.remove('active'));
-    paginationBtns.forEach(btn => {
-        if (btn.getAttribute('index') == currentIndex) btn.classList.add('active');
-    });
+        var paginationBtns = document.querySelectorAll('.pagination button');
+        paginationBtns.forEach(btn => btn.classList.remove('active'));
+        paginationBtns.forEach(btn => {
+          if (btn.getAttribute('index') == currentIndex)
+            btn.classList.add('active');
+        });
 
-    showInfo();
-}
+        showInfo();
+        disableBtn();
+      }
 
-function showInfo() {
-    userInfo.innerHTML = '';
-    if (Data.length === 0) {
-        userInfo.innerHTML = `<tr><td class="empty" colspan="6" align="center">No data available in table</td></tr>`;
-        return;
-    }
+      function showInfo() {
+        userInfo.innerHTML = '';
+        if (Data.length === 0) {
+          userInfo.innerHTML = `<tr><td class="empty" colspan="6" align="center">No data available in table</td></tr>`;
+          return;
+        }
 
-    for (var i = startIndex; i < endIndex; i++) {
+        for (var i = startIndex; i < endIndex; i++) {
+          const staff = Data[i];
+          userInfo.innerHTML += `<tr class="employeeDetails">
+                  <td>${i + 1}</td>
+                  <td><img src="${staff.picture}" width="40" height="40"></td>
+                  <td>${staff.fName}</td>
+                  <td>${staff.emailVal}</td>
+                  <td>${staff.phoneVal}</td>
+                  <td>
+                      <button onclick="editInfo(${i})">Edit</button>
+                      <button onclick="deleteInfo(${i})">Delete</button>
+                  </td>
+              </tr>`;
+        }
+      }
+
+      // Edit & Delete Functions
+      function editInfo(i) {
+        isEdit = true;
+        editId = i;
         const staff = Data[i];
-        userInfo.innerHTML += `<tr class="employeeDetails">
-            <td>${i + 1}</td>
-            <td><img src="${staff.picture}" width="40" height="40"></td>
-            <td>${staff.fName}</td>
-            <td>${staff.emailVal}</td>
-            <td>${staff.phoneVal}</td>
-            <td>
-                <button onclick="editInfo(${i})">Edit</button>
-                <button onclick="deleteInfo(${i})">Delete</button>
-            </td>
-        </tr>`;
-    }
-}
+        imgInput.src = staff.picture || 'img.png';
+        fName.value = staff.fName;
+        email.value = staff.emailVal;
+        phone.value = staff.phoneVal;
+        submitBtn.innerHTML = 'Update';
+        darkBg.classList.add('active');
+        popupForm.classList.add('active');
+      }
 
-// Edit & Delete Functions
-function editInfo(i) {
-    isEdit = true;
-    editId = i;
-    const staff = Data[i];
-    imgInput.src = staff.picture || 'img.png';
-    fName.value = staff.fName;
-    email.value = staff.emailVal;
-    phone.value = staff.phoneVal;
-    submitBtn.innerHTML = 'Update';
-    darkBg.classList.add('active');
-    popupForm.classList.add('active');
-}
+      function deleteInfo(i) {
+        if (confirm('Are you sure you want to delete this entry?')) {
+          Data.splice(i, 1);
+          localStorage.setItem('user', JSON.stringify(Data));
+          if (currentIndex > Math.ceil(Data.length / tableSize)) currentIndex--;
+          displayIndexBtn();
+          highlightIndexBtn();
+        }
+      }
 
-function deleteInfo(i) {
-    if (confirm('Are you sure you want to delete this entry?')) {
-        Data.splice(i, 1);
+      // Event Listeners
+      newMemberAddBtn.addEventListener('click', () => {
+        isEdit = false;
+        editId = null;
+        submitBtn.innerHTML = 'Submit';
+        imgInput.src = 'img.png';
+        darkBg.classList.add('active');
+        popupForm.classList.add('active');
+      });
+
+      crossBtn.addEventListener('click', () => {
+        darkBg.classList.remove('active');
+        popupForm.classList.remove('active');
+        document.getElementById('myForm').reset();
+      });
+
+      uploadimg.onchange = function () {
+        if (uploadimg.files[0].size < 5000000) {
+          var filereader = new FileReader();
+          filereader.onload = function (w) {
+            imgInput.src = w.target.result;
+          };
+          filereader.readAsDataURL(uploadimg.files[0]);
+        } else {
+          alert('File is too large!');
+        }
+      };
+
+      document.getElementById('myForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const information = {
+          id: Date.now(),
+          picture: imgInput.src || 'img.png',
+          fName: fName.value,
+          emailVal: email.value,
+          phoneVal: phone.value,
+        };
+
+        if (isEdit && editId !== null) {
+          Data[editId] = information;
+        } else {
+          Data.unshift(information);
+        }
+
         localStorage.setItem('user', JSON.stringify(Data));
-        if (currentIndex > Math.ceil(Data.length / tableSize)) currentIndex--;
+        darkBg.classList.remove('active');
+        popupForm.classList.remove('active');
+        document.getElementById('myForm').reset();
         displayIndexBtn();
         highlightIndexBtn();
-    }
-}
+      });
 
-// Event Listeners
-newMemberAddBtn.addEventListener('click', () => {
-    isEdit = false;
-    editId = null;
-    submitBtn.innerHTML = 'Submit';
-    imgInput.src = 'img.png';
-    darkBg.classList.add('active');
-    popupForm.classList.add('active');
-});
+      function next() {
+        if (currentIndex < maxIndex) {
+          currentIndex++;
+          highlightIndexBtn();
+        }
+      }
 
-crossBtn.addEventListener('click', () => {
-    darkBg.classList.remove('active');
-    popupForm.classList.remove('active');
-    document.getElementById('myForm').reset();
-});
+      function prev() {
+        if (currentIndex > 1) {
+          currentIndex--;
+          highlightIndexBtn();
+        }
+      }
 
-uploadimg.onchange = function () {
-    if (uploadimg.files[0].size < 5000000) {
-        var filereader = new FileReader();
-        filereader.onload = function (w) {
-            imgInput.src = w.target.result;
-        };
-        filereader.readAsDataURL(uploadimg.files[0]);
-    } else {
-        alert('File is too large!');
-    }
-};
-
-document.getElementById('myForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const information = {
-        id: Date.now(),
-        picture: imgInput.src || 'img.png',
-        fName: fName.value,
-        emailVal: email.value,
-        phoneVal: phone.value,
-    };
-
-    if (isEdit && editId !== null) {
-        Data[editId] = information;
-    } else {
-        Data.unshift(information);
-    }
-
-    localStorage.setItem('user', JSON.stringify(Data));
-    darkBg.classList.remove('active');
-    popupForm.classList.remove('active');
-    document.getElementById('myForm').reset();
-    displayIndexBtn();
-    highlightIndexBtn();
-});
-
-function next() {
-    if (currentIndex < maxIndex) {
-        currentIndex++;
+      function paginationBtn(i) {
+        currentIndex = i;
         highlightIndexBtn();
-    }
-}
+      }
 
-function prev() {
-    if (currentIndex > 1) {
-        currentIndex--;
-        highlightIndexBtn();
-    }
-}
+      tabSize &&
+        tabSize.addEventListener('change', function () {
+          tableSize = parseInt(tabSize.value);
+          currentIndex = 1;
+          displayIndexBtn();
+          highlightIndexBtn();
+        });
+      function disableBtn() {
+        const prev = document.querySelector('.prev');
+        const next = document.querySelector('.next');
 
-function paginationBtn(i) {
-    currentIndex = i;
-    highlightIndexBtn();
-}
+        if (currentIndex === 1) {
+          prev.classList.add('disabled');
+        } else {
+          prev.classList.remove('disabled');
+        }
 
-tabSize && tabSize.addEventListener('change', function () {
-    tableSize = parseInt(tabSize.value);
-    currentIndex = 1;
-    displayIndexBtn();
-    highlightIndexBtn();
-});
+        if (currentIndex === maxIndex) {
+          next.classList.add('disabled');
+        } else {
+          next.classList.remove('disabled');
+        }
+        if (Data.length === 0) {
+          prev.classList.add('disabled');
+          next.classList.add('disabled');
+        }
+      }
+      search.addEventListener('input', function searcrhIt(e) {
+        const searchText = e.target.value.toLowerCase().trim();
 
-// Initialize
-displayIndexBtn();
-highlightIndexBtn();
+        if (searchText !== '') {
+          const newData = Data.filter(function (item) {
+            const name = item.fName.toLowerCase();
+            return name.includes(searchText);
+          });
+          Data = newData;
+
+          currentIndex = 1;
+          startIndex = 1;
+          showInfo();
+          displayIndexBtn();
+          disableBtn();
+        } else {
+          Data = localStorage.getItem('user')
+            ? JSON.parse(localStorage.getItem('user'))
+            : [];
+          currentIndex = 1;
+          startIndex = 1;
+          showInfo();
+          displayIndexBtn();
+          disableBtn();
+        }
+      });
+
+      // Initialize
+      displayIndexBtn();
+      highlightIndexBtn();
     </script>
   </body>
 </html>
