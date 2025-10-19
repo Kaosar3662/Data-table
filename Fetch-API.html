@@ -360,7 +360,7 @@
                   <td>${staff.id}</td>
                   <td>${staff.fName}</td>
                   <td>${staff.emailVal}</td>
-                  <td>${staff.phoneVal}</td>
+                  <td>$${staff.phoneVal}</td>
                   <td>
                       <button onclick="editInfo(${i})">Edit</button>
                       <button onclick="deleteInfo(${i})">Delete</button>
@@ -466,13 +466,13 @@
         highlightIndexBtn();
       }
 
-      tabSize &&
-        tabSize.addEventListener('change', function () {
-          tableSize = parseInt(tabSize.value);
-          currentIndex = 1;
-          displayIndexBtn();
-          highlightIndexBtn();
-        });
+      // tabSize &&
+      //   tabSize.addEventListener('change', function () {
+      //     tableSize = parseInt(tabSize.value);
+      //     currentIndex = 1;
+      //     displayIndexBtn();
+      //     highlightIndexBtn();
+      //   });
 
       function disableBtn() {
         const prev = document.querySelector('.prev');
