@@ -159,7 +159,7 @@
         </div>
 
         <div class="addMemberBtn">
-          <button>Add member</button>
+          <button>Add product</button>
         </div>
       </header>
 
@@ -167,10 +167,10 @@
         <thead>
           <tr class="heading">
             <th>Id</th>
-            <th>Img</th>
+            <!-- <th>Img</th> -->
             <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
+            <th>Category</th>
+            <th>Pricing</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -238,29 +238,29 @@
         </header>
         <div class="body">
           <form action="#" id="myForm">
-            <div class="imgholder">
+            <!-- <div class="imgholder">
               <label for="uploadimg" class="upload">
                 <input type="file" name="" id="uploadimg" class="picture" />
                 <i>Upload</i>
                 <img src="img.png" width="50" alt="img" class="img" />
               </label>
-            </div>
+            </div> -->
             <div class="inputFieldContainer">
               <div class="nameField">
                 <div class="form_control">
-                  <label for="fName">Full Name:</label>
+                  <label for="fName">Name:</label>
                   <input type="text" name="" id="fName" required />
                 </div>
               </div>
 
               <div class="form_control">
-                <label for="email">Email:</label>
-                <input type="email" name="" id="email" required />
+                <label for="email">Category</label>
+                <input type="text" name="" id="email" required />
               </div>
 
               <div class="form_control">
-                <label for="phone">Phone:</label>
-                <input type="number" name="" id="phone" required />
+                <label for="phone">pricing</label>
+                <input type="text" name="" id="phone" required />
               </div>
             </div>
           </form>
@@ -289,14 +289,28 @@
         tabSize = document.getElementById('table-size'),
         search = document.getElementById('search');
 
-      var Data = [];
-      var tableSize = 5;
+      var tableSize = 2;
       var currentIndex = 1;
       var startIndex = 0;
       var endIndex = 0;
       var maxIndex = 0;
       var isEdit = false;
       var editId = null;
+      var Data = [];
+
+      var apiUrl = 'http://localhost/test-api.php';
+      async function callApi() {
+        const calledData = await fetch(apiUrl);
+        const res = await calledData.json();
+        const fullData = res.map(item => ({
+          id: item.id,
+          fName: item.title,
+          emailVal: item.category,
+          phoneVal: item.price,
+        }));
+        Data = fullData;
+      }
+      callApi();
 
       // Functions
       function preloadCalculation() {
@@ -339,12 +353,11 @@
           userInfo.innerHTML = `<tr><td class="empty" colspan="6" align="center">No data available in table</td></tr>`;
           return;
         }
-
+        //            <td><img src="${staff.picture}" width="40" height="40"></td>
         for (var i = startIndex; i < endIndex; i++) {
           const staff = Data[i];
           userInfo.innerHTML += `<tr class="employeeDetails">
-                  <td>${i + 1}</td>
-                  <td><img src="${staff.picture}" width="40" height="40"></td>
+                  <td>${staff.id}</td>
                   <td>${staff.fName}</td>
                   <td>${staff.emailVal}</td>
                   <td>${staff.phoneVal}</td>
@@ -361,7 +374,7 @@
         isEdit = true;
         editId = i;
         const staff = Data[i];
-        imgInput.src = staff.picture || 'img.png';
+        // imgInput.src = staff.picture || 'img.png';
         fName.value = staff.fName;
         email.value = staff.emailVal;
         phone.value = staff.phoneVal;
@@ -386,7 +399,7 @@
         isEdit = false;
         editId = null;
         submitBtn.innerHTML = 'Submit';
-        imgInput.src = 'img.png';
+        // imgInput.src = 'img.png';
         darkBg.classList.add('active');
         popupForm.classList.add('active');
       });
@@ -397,23 +410,23 @@
         document.getElementById('myForm').reset();
       });
 
-      uploadimg.onchange = function () {
-        if (uploadimg.files[0].size < 5000000) {
-          var filereader = new FileReader();
-          filereader.onload = function (w) {
-            imgInput.src = w.target.result;
-          };
-          filereader.readAsDataURL(uploadimg.files[0]);
-        } else {
-          alert('File is too large!');
-        }
-      };
+      // uploadimg.onchange = function () {
+      //   if (uploadimg.files[0].size < 5000000) {
+      //     var filereader = new FileReader();
+      //     filereader.onload = function (w) {
+      //       imgInput.src = w.target.result;
+      //     };
+      //     filereader.readAsDataURL(uploadimg.files[0]);
+      //   } else {
+      //     alert('File is too large!');
+      //   }
+      // };
 
       document.getElementById('myForm').addEventListener('submit', e => {
         e.preventDefault();
         const information = {
           id: Date.now(),
-          picture: imgInput.src || 'img.png',
+          // picture: imgInput.src || 'img.png',
           fName: fName.value,
           emailVal: email.value,
           phoneVal: phone.value,
@@ -426,7 +439,7 @@
         }
 
         // localStorage.setItem('user', JSON.stringify(Data));
-        // Set Item to Api 
+        // Set Item to Api
         darkBg.classList.remove('active');
         popupForm.classList.remove('active');
         document.getElementById('myForm').reset();
@@ -460,6 +473,7 @@
           displayIndexBtn();
           highlightIndexBtn();
         });
+
       function disableBtn() {
         const prev = document.querySelector('.prev');
         const next = document.querySelector('.next');
@@ -480,6 +494,7 @@
           next.classList.add('disabled');
         }
       }
+
       search.addEventListener('input', function searcrhIt(e) {
         const searchText = e.target.value.toLowerCase().trim();
 
@@ -492,22 +507,27 @@
 
           currentIndex = 1;
           startIndex = 1;
-          showInfo();
+          endIndex = Data.length;
           displayIndexBtn();
+          highlightIndexBtn();
           disableBtn();
         } else {
-          Data = [];//Set this to api
+          Data = [];
           currentIndex = 1;
           startIndex = 1;
           showInfo();
-          displayIndexBtn();
+          init();
           disableBtn();
         }
       });
 
       // Initialize
-      displayIndexBtn();
-      highlightIndexBtn();
+      async function init() {
+        await callApi();
+        displayIndexBtn();
+        highlightIndexBtn();
+      }
+      init();
     </script>
   </body>
 </html>
