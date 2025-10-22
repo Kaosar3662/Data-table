@@ -4,14 +4,12 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-	http_response_code(200);
-	exit();
-}
-
 $connection = new mysqli("localhost", "root", "", "kaosar");
-
+$input = json_decode(file_get_contents("php://input"), true);
 $method = $_SERVER['REQUEST_METHOD'];
+
+
+// GET ALL ROWS ----------------------------
 
 if ($method == 'GET') {
 	$sql = "SELECT * FROM products";
@@ -21,20 +19,24 @@ if ($method == 'GET') {
 	while ($row = $result->fetch_assoc()) {
 		$data[] = $row;
 	}
-
 	echo json_encode($data);
+
+
+	// CREATE A ROW ----------------------------
+
 } elseif ($method == 'POST') {
-	$input = json_decode(file_get_contents("php://input"), true);
-	$title = $input['title'];
-	$category = $input['category'];
-	$price = $input['price'];
+
+	$title = $connection->real_escape_string($input['title']);
+	$category = $connection->real_escape_string($input['category']);
+	$price = $connection->real_escape_string($input['price']);
 
 	$sql = "INSERT INTO products (title,category,price) VALUES ('$title', '$category', '$price')";
 	$result = $connection->query($sql);
-} elseif ($method == 'PUT') {
-	$input = json_decode(file_get_contents("php://input"), true);
 
-	// Sanitize inputs
+
+	// UPDATE A ROW ----------------------------
+
+} elseif ($method == 'PUT') {
 	$id = (int)$input['id'];
 	$title = $connection->real_escape_string($input['title']);
 	$category = $connection->real_escape_string($input['category']);
@@ -46,15 +48,22 @@ if ($method == 'GET') {
 		if ($connection->query($sql)) {
 			echo json_encode(["success" => true, "id" => $id]);
 		}
-	} 
+	}
 
+
+	// DELETE A ROW ----------------------------
 
 } elseif ($method == 'DELETE') {
-	$input = json_decode(file_get_contents("php://input"), true);
-	$id = $input['id'] ?? 0;
+	$id = isset($input['id']) ? (int)$input['id'] : 0;
 
 	if ($id) {
 		$sql = "DELETE FROM products WHERE id=$id";
 		$result = $connection->query($sql);
 	}
-}
+	// OTHERER WIS EXIT THIS ----------------------------
+} elseif ($method === 'OPTIONS') {
+	http_response_code(200);
+	exit();
+} else {
+	exit();
+};

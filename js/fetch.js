@@ -25,16 +25,18 @@ var editId = null;
 var Data = [];
 
 var apiUrl = 'http://localhost/php/kaosar/learning/api.php';
+let originalData = [];
+
 async function callApi() {
   const calledData = await fetch(apiUrl);
   const res = await calledData.json();
-  const fullData = res.map(item => ({
+  originalData = res.map(item => ({
     id: item.id,
     title: item.title,
     category: item.category,
     price: item.price,
   }));
-  Data = fullData;
+  Data = [...originalData];
 }
 callApi();
 
@@ -119,6 +121,7 @@ function deleteInfo(idn) {
     const information = {
       id: idn,
     };
+    console.log(JSON.stringify(information));
     fetch(apiUrl, {
       method: 'DELETE',
       headers: {
@@ -167,7 +170,7 @@ document.getElementById('myForm').addEventListener('submit', e => {
     category: category.value,
     price: price.value,
   };
-  console.log(JSON.stringify(information))
+  console.log(JSON.stringify(information));
 
   if (isEdit && editId !== null) {
     fetch(apiUrl, {
@@ -240,25 +243,23 @@ function disableBtn() {
 search.addEventListener('input', function searcrhIt(e) {
   const searchText = e.target.value.toLowerCase().trim();
 
-  if (searchText !== '') {
-    const newData = Data.filter(function (item) {
-      const name = item.title.toLowerCase();
-      return name.includes(searchText);
-    });
+  if (searchText) {
+    const newData = originalData.filter(item =>
+      item.title.toLowerCase().includes(searchText)
+    );
     Data = newData;
 
     currentIndex = 1;
     startIndex = 1;
     endIndex = Data.length;
-    displayIndexBtn();
     highlightIndexBtn();
     disableBtn();
+    console.log(searchText);
   } else {
-    Data = [];
+    Data = [...originalData];
     currentIndex = 1;
     startIndex = 1;
     showInfo();
-    init();
     disableBtn();
   }
 });
