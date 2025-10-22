@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LS CRUD</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0px;
+        padding: 0px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px;
+        min-height: 100vh;
+        background-color: rgb(216, 227, 229);
+      }
+
+      input,
+      button,
+      select,
+      .empty {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        background: #f4f9ff;
+        padding: 20px;
+        border: solid 1px black;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      header .filterEntries {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* Table */
+      .container table {
+        border-collapse: collapse;
+        text-align: left;
+      }
+      thead tr th,
+      tbody tr td {
+        border: 1px solid;
+        padding: 3px 15px;
+      }
+      table footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      /* overlay */
+      .popup-background {
+        background-color: rgba(0, 0, 0, 0.532);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        place-content: center;
+        z-index: 10;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .popup-background .popup {
+        background-color: #f4f9ff;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        border: solid 1px black;
+      }
+      .imgholder,
+      label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+      }
+      .inputFieldContainer input,
+      .popup button {
+        width: 100%;
+      }
+      .inputFieldContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      /* Universal Styles */
+      .hide {
+        display: none;
+      }
+      .show {
+        display: flex;
+      }
+      .active {
+        transform: scale(1);
+        opacity: 1;
+        background-color: rgba(143, 127, 219, 0.587);
+        visibility: visible;
+      }
+
+      /* dont know why add this 3 block  */
+      .pagination button.active,
+      .pagination button:hover {
+        background: var(--red1);
+      }
+
+      .pagination button.act:first-child {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .pagination button.act:last-child {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .disabled {
+        pointer-events: none;
+        opacity: 30%;
+        user-select: none;
+      }
+      .hidee{
+        position: absolute;
+        left:-1000000000%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h2>Admin</h2>
+        <div class="filterEntries">
+          <div class="filter">
+            <input
+              type="search"
+              name=""
+              id="search"
+              placeholder="Search here"
+            />
+          </div>
+        </div>
+
+        <div class="addMemberBtn">
+          <button>Add product</button>
+        </div>
+      </header>
+
+      <table>
+        <thead>
+          <tr class="heading">
+            <th>Id</th>
+            <!-- <th>Img</th> -->
+            <th>Name</th>
+            <th>Category</th>
+            <th>Pricing</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="userInfo">
+          <!-- table row will be added here -->
+        </tbody>
+      </table>
+
+      <footer>
+        <span class="showEntries">1 to 10 out of 500</span>
+        <div class="pagination">
+          <!-- pagination will be added here  -->
+        </div>
+      </footer>
+    </div>
+
+    <!-- overlay -->
+    <div class="popup-background">
+      <div class="popup">
+        <header>
+          <button class="closeBtn">close</button>
+        </header>
+        <div class="body">
+          <form action="#" id="myForm">
+            <!-- <div class="imgholder">
+              <label for="uploadimg" class="upload">
+                <input type="file" name="" id="uploadimg" class="picture" />
+                <i>Upload</i>
+                <img src="img.png" width="50" alt="img" class="img" />
+              </label>
+            </div> -->
+            <div class="inputFieldContainer">
+              <div class="hidee">
+                  <input type="text" name="id" id="id" />
+              </div>
+              <div class="nameField">
+                <div class="form_control">
+                  <label for="title">Name:</label>
+                  <input type="text" name="" id="title" required />
+                </div>
+              </div>
+
+              <div class="form_control">
+                <label for="category">Category</label>
+                <input type="text" name="" id="category" required />
+              </div>
+
+              <div class="form_control">
+                <label for="price">pricing</label>
+                <input type="number" name="" id="price" required min="0"/>
+              </div>
+            </div>
+          </form>
+        </div>
+        <footer>
+          <button form="myForm" class="submitBtn">Submit</button>
+        </footer>
+      </div>
+    </div>
+
+    <script src="js/fetch.js"></script>
+  </body>
+</html>
