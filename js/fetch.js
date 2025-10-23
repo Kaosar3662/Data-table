@@ -15,7 +15,7 @@ var newMemberAddBtn = document.querySelector('.addMemberBtn'),
   tabSize = document.getElementById('table-size'),
   search = document.getElementById('search');
 
-var tableSize = 2;
+var tableSize = 3;
 var currentIndex = 1;
 var startIndex = 0;
 var endIndex = 0;
