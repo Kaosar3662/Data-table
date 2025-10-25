@@ -17,7 +17,7 @@ if ($method == "POST") {
     echo json_encode(['status' => 'success', 'id' => $lastId]);
     
   } catch (PDOException $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode(['error' => $e->getMessage()]);  
   }
 } else {
   exit();

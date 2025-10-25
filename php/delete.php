@@ -4,9 +4,9 @@ if ($method == "DELETE") {
   try {
     $id = $input['id'];
 
-    $stmt = $conn->prepare("DELETE FROM MyGuests WHERE id = :id");
+    $stmt = $conn->prepare("DELETE FROM $tablename WHERE id = :id");
     $stmt->bindParam(':id', $id);
-    
+
     $stmt->execute();
 
     echo "Record deleted successfully";
